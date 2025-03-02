@@ -12,7 +12,6 @@ fn main() {
         .filter(|line| match check_direction(line) {
             "asc" => true,
             "desc" => true,
-            "unsafe" => false,
             &_ => false,
         })
         .filter(|line| distances_safe(line))
