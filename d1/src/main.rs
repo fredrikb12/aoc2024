@@ -55,4 +55,22 @@ fn main() {
     lists.sort();
     let total_distance = lists.calculate_total_distance();
     println!("total distance: {total_distance}");
+    let similarity = part2(lists);
+    println!("similarity: {similarity}");
+}
+
+fn part2(lists: Lists) -> i32 {
+    let total = lists.l1.iter().fold(0, |acc, num| {
+        let instances = count_instances(&lists.l2, num);
+        acc + num * instances
+    });
+    total
+}
+
+fn count_instances(list: &[i32], number: &i32) -> i32 {
+    list.iter()
+        .filter(|num| num == &number)
+        .count()
+        .try_into()
+        .unwrap()
 }
