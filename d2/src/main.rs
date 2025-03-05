@@ -13,6 +13,12 @@ impl Line {
 
 fn main() {
     let lines = read_lines("input.txt");
+    p1(&lines);
+
+    p2(&lines);
+}
+
+fn p1(lines: &[Line]) {
     let safe_count: usize = lines
         .iter()
         .filter(|line| match check_direction(line) {
@@ -22,46 +28,34 @@ fn main() {
         })
         .filter(|line| distances_safe(line))
         .count();
-    println!("safe count p1: {safe_count}");
-
-    p2(lines);
+    println!("p1 count: {safe_count}");
 }
 
-fn p2(lines: Vec<Line>) -> i32 {
+fn p2(lines: &[Line]) {
     let count = lines
         .iter()
         .filter(|line| {
             if check_line_safe(line) {
                 return true;
             }
-            match find_unsafe_indices(line) {
-                Some(indices) => indices
-                    .iter()
-                    .map(|index| {
-                        let line = line.remove_index(*index);
-                        let line_safe = check_line_safe(&line);
-                        if line_safe {
-                            println!("line safe: {:?}", line);
-                            return true;
-                        };
-                        false
-                    })
-                    .any(|v| v),
-                None => false,
+            let possible_lines = create_possible_lines(line);
+
+            if possible_lines.iter().any(check_line_safe) {
+                return true;
             }
+            false
         })
         .count();
     println!("p2 count: {count}");
-    1
 }
 
-fn find_unsafe_indices(line: &Line) -> Option<Vec<usize>> {
-    let vec: Vec<usize> = create_iterator(line)
-        .enumerate()
-        .filter(|(_i, (a, b))| (*a - *b).abs() > 3)
-        .map(|(i, _)| i)
-        .collect();
-    if !vec.is_empty() { Some(vec) } else { None }
+fn create_possible_lines(line: &Line) -> Vec<Line> {
+    let mut vec: Vec<Line> = vec![];
+    for n in 0..=line.reports.len() - 1 {
+        let new_line = line.remove_index(n);
+        vec.push(new_line);
+    }
+    vec
 }
 
 fn check_line_safe(line: &Line) -> bool {
