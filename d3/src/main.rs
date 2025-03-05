@@ -34,7 +34,13 @@ fn p2(input: &str) {
         .map(|(i, _)| i)
         .map(|index| {
             for x in 4..=MAX_LENGTH {
-                let vec: Vec<_> = input.chars().skip(index).take(x).collect();
+                let vec: Vec<_> = input
+                    .get(index..)
+                    .unwrap()
+                    .chars()
+                    // .skip(index)
+                    .take(x)
+                    .collect();
                 let s: String = vec.into_iter().collect();
                 if s == "do()" {
                     enabled = true;
