@@ -4,6 +4,7 @@ fn main() {
     let input = read_lines("input.txt");
 
     p1(&input);
+    p2(&input);
 }
 
 fn p1(input: &str) {
@@ -25,12 +26,47 @@ fn p1(input: &str) {
         .sum();
     println!("sum: {sum}");
 }
+const MAX_LENGTH: usize = "mul(123,123)".len();
+fn p2(input: &str) {
+    let mut enabled = true;
+    let sum: i32 = input
+        .chars()
+        .enumerate()
+        .map(|(i, _)| i)
+        .map(|index| {
+            for x in 4..=MAX_LENGTH {
+                let vec: Vec<_> = input.chars().skip(index).take(x).collect();
+                let s: String = vec.into_iter().collect();
+                if s == "do()" {
+                    enabled = true;
+                } else if s == "don't()" {
+                    enabled = false;
+                }
+
+                if let Some((v1, v2)) = check_valid(&s) {
+                    println!("found valid {v1}, {v2}. enabled is: {enabled}");
+                    if !enabled {
+                        return 0;
+                    }
+                    return get_multiple_value(v1, v2);
+                }
+            }
+
+            0
+        })
+        .sum();
+
+    println!("p2 sum: {sum}");
+}
 
 fn get_multiple_value(v1: i32, v2: i32) -> i32 {
     v1 * v2
 }
 
 fn check_valid(str: &str) -> Option<(i32, i32)> {
+    if !str.starts_with("mul(") {
+        return None;
+    }
     if !str.ends_with(')') {
         return None;
     }
