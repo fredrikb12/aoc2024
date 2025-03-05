@@ -2,9 +2,14 @@ use std::fs::read_to_string;
 
 fn main() {
     let input = read_lines("input.txt");
+
+    p1(&input);
+}
+
+fn p1(input: &str) {
     let indices: Vec<_> = input.match_indices("mul(").map(|(i, _)| i).collect();
 
-    let test: i32 = indices
+    let sum: i32 = indices
         .iter()
         .map(|i| {
             for x in 4..8 {
@@ -18,7 +23,7 @@ fn main() {
             0
         })
         .sum();
-    println!("sum: {test}");
+    println!("sum: {sum}");
 }
 
 fn get_multiple_value(v1: i32, v2: i32) -> i32 {
