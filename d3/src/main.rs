@@ -16,9 +16,8 @@ fn p1(input: &str) {
             for x in 4..8 {
                 let vec: Vec<_> = input.chars().skip(*i).take(x + 5).collect();
                 let s: String = vec.into_iter().collect();
-                // println!("s: {s}");
                 if let Some((v1, v2)) = check_valid(&s) {
-                    return get_multiple_value(v1, v2);
+                    return v1 * v2;
                 }
             }
             0
@@ -44,11 +43,10 @@ fn p2(input: &str) {
                 }
 
                 if let Some((v1, v2)) = check_valid(&s) {
-                    println!("found valid {v1}, {v2}. enabled is: {enabled}");
                     if !enabled {
                         return 0;
                     }
-                    return get_multiple_value(v1, v2);
+                    return v1 * v2;
                 }
             }
 
@@ -57,10 +55,6 @@ fn p2(input: &str) {
         .sum();
 
     println!("p2 sum: {sum}");
-}
-
-fn get_multiple_value(v1: i32, v2: i32) -> i32 {
-    v1 * v2
 }
 
 fn check_valid(str: &str) -> Option<(i32, i32)> {
