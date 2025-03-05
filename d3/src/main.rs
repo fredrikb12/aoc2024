@@ -23,7 +23,7 @@ fn p1(input: &str) {
             0
         })
         .sum();
-    println!("sum: {sum}");
+    println!("p1 sum: {sum}");
 }
 const MAX_LENGTH: usize = "mul(123,123)".len();
 fn p2(input: &str) {
